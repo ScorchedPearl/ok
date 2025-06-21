@@ -21,11 +21,7 @@ public class OnboardingTaskService {
 
     private final OnboardingTaskRepository onboardingTaskRepository;
 
-    // Tenant Operations
 
-    /**
-     * Get all onboarding tasks for a tenant
-     */
     public List<OnboardingTaskDTO> getAllTasksForTenant(Long tenantId) {
         List<OnboardingTask> tasks = onboardingTaskRepository.findByTenantIdOrderBySequenceOrderAsc(tenantId);
         return tasks.stream()
@@ -33,9 +29,7 @@ public class OnboardingTaskService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Get tasks for a tenant filtered by status
-     */
+
     public List<OnboardingTaskDTO> getTasksForTenantByStatus(Long tenantId, TaskStatus status) {
         List<OnboardingTask> tasks = onboardingTaskRepository.findByTenantIdAndStatusOrderBySequenceOrderAsc(tenantId, status);
         return tasks.stream()
@@ -43,9 +37,7 @@ public class OnboardingTaskService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Get tasks for a specific job within a tenant
-     */
+
     public List<OnboardingTaskDTO> getTasksForTenantByJob(Long tenantId, UUID jobId) {
         List<OnboardingTask> tasks = onboardingTaskRepository.findByTenantIdAndJobIdOrderBySequenceOrderAsc(tenantId, jobId);
         return tasks.stream()
@@ -53,9 +45,7 @@ public class OnboardingTaskService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Get tasks for a specific candidate within a tenant
-     */
+
     public List<OnboardingTaskDTO> getTasksForTenantByCandidate(Long tenantId, Long candidateId) {
         List<OnboardingTask> tasks = onboardingTaskRepository.findByTenantIdAndCandidateIdOrderBySequenceOrderAsc(tenantId, candidateId);
         return tasks.stream()
@@ -63,9 +53,7 @@ public class OnboardingTaskService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Create a new onboarding task
-     */
+
     @Transactional
     public OnboardingTaskDTO createTask(Long tenantId, Long assignedByUserId, OnboardingTaskCreateRequest request) {
         OnboardingTask task = OnboardingTask.builder()
@@ -89,9 +77,6 @@ public class OnboardingTaskService {
         return convertToDTO(savedTask);
     }
 
-    /**
-     * Get overdue tasks for a tenant
-     */
     public List<OnboardingTaskDTO> getOverdueTasksForTenant(Long tenantId) {
         List<OnboardingTask> tasks = onboardingTaskRepository.findOverdueTasksByTenant(tenantId, LocalDateTime.now());
         return tasks.stream()
@@ -99,11 +84,7 @@ public class OnboardingTaskService {
                 .collect(Collectors.toList());
     }
 
-    // Candidate Operations
 
-    /**
-     * Get all tasks assigned to a candidate
-     */
     public List<OnboardingTaskDTO> getTasksForCandidate(Long candidateId) {
         List<OnboardingTask> tasks = onboardingTaskRepository.findByCandidateIdOrderBySequenceOrderAsc(candidateId);
         return tasks.stream()
@@ -111,9 +92,7 @@ public class OnboardingTaskService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Get tasks for a candidate filtered by status
-     */
+
     public List<OnboardingTaskDTO> getTasksForCandidateByStatus(Long candidateId, TaskStatus status) {
         List<OnboardingTask> tasks = onboardingTaskRepository.findByCandidateIdAndStatusOrderBySequenceOrderAsc(candidateId, status);
         return tasks.stream()
@@ -121,9 +100,6 @@ public class OnboardingTaskService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Get pending tasks for a candidate
-     */
     public List<OnboardingTaskDTO> getPendingTasksForCandidate(Long candidateId) {
         List<OnboardingTask> tasks = onboardingTaskRepository.findPendingTasksByCandidate(candidateId);
         return tasks.stream()
@@ -131,9 +107,7 @@ public class OnboardingTaskService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Get completed tasks for a candidate
-     */
+
     public List<OnboardingTaskDTO> getCompletedTasksForCandidate(Long candidateId) {
         List<OnboardingTask> tasks = onboardingTaskRepository.findCompletedTasksByCandidate(candidateId);
         return tasks.stream()
@@ -141,20 +115,18 @@ public class OnboardingTaskService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Mark a task as completed by candidate
-     */
+
     @Transactional
     public OnboardingTaskDTO completeTask(Long taskId, Long candidateId, OnboardingTaskCompleteRequest request) {
         OnboardingTask task = onboardingTaskRepository.findById(taskId)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
 
-        // Verify the task belongs to the candidate
+
         if (!task.getCandidateId().equals(candidateId)) {
             throw new RuntimeException("Task does not belong to the specified candidate");
         }
 
-        // Verify the task is not already completed
+
         if (task.isCompleted()) {
             throw new RuntimeException("Task is already completed");
         }
@@ -172,11 +144,9 @@ public class OnboardingTaskService {
         return convertToDTO(savedTask);
     }
 
-    /**
-     * Get task summary for a candidate
-     */
+
     public OnboardingTaskSummaryDTO getTaskSummaryForCandidate(Long candidateId) {
-        Long totalTasks = onboardingTaskRepository.countTasksByStatusForCandidate(candidateId, null);
+        Long totalTasks = onboardingTaskRepository.countAllTasksForCandidate(candidateId);
         Long completedTasks = onboardingTaskRepository.countTasksByStatusForCandidate(candidateId, TaskStatus.COMPLETED);
         Long pendingTasks = onboardingTaskRepository.countTasksByStatusForCandidate(candidateId, TaskStatus.PENDING);
         Long overdueTasks = (long) onboardingTaskRepository.findOverdueTasksByCandidate(candidateId, LocalDateTime.now()).size();
@@ -194,11 +164,7 @@ public class OnboardingTaskService {
                 .build();
     }
 
-    // Common Operations
 
-    /**
-     * Update a task
-     */
     @Transactional
     public OnboardingTaskDTO updateTask(Long taskId, OnboardingTaskUpdateRequest request) {
         OnboardingTask task = onboardingTaskRepository.findById(taskId)
@@ -219,9 +185,6 @@ public class OnboardingTaskService {
         return convertToDTO(savedTask);
     }
 
-    /**
-     * Delete a task
-     */
     @Transactional
     public void deleteTask(Long taskId) {
         if (!onboardingTaskRepository.existsById(taskId)) {
@@ -231,16 +194,13 @@ public class OnboardingTaskService {
         log.info("Deleted onboarding task {}", taskId);
     }
 
-    /**
-     * Get a specific task by ID
-     */
+
     public OnboardingTaskDTO getTaskById(Long taskId) {
         OnboardingTask task = onboardingTaskRepository.findById(taskId)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
         return convertToDTO(task);
     }
 
-    // Helper Methods
 
     private OnboardingTaskDTO convertToDTO(OnboardingTask task) {
         return OnboardingTaskDTO.builder()
@@ -261,7 +221,6 @@ public class OnboardingTaskService {
                 .notes(task.getNotes())
                 .isMandatory(task.getIsMandatory())
                 .isOverdue(task.isOverdue())
-                // Additional fields would be populated if needed from joined data
                 .build();
     }
 }

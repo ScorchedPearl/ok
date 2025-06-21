@@ -1,0 +1,235 @@
+{
+    "banner": {
+      "jobTitle": "Medical Professional Application",
+      "description": "This Medical Professional Application form is designed to streamline the process of gathering essential candidate information, from personal details and educational background to professional experience and crucial documentation. The form is divided into clear, intuitive steps that guide applicants through each stage, ensuring all necessary data is captured efficiently. Each section features user-friendly input fields enhanced with icons and validation rules to improve data accuracy. Overall, this configuration ensures a smooth, professional, and engaging application experience for dedicated healthcare professionals.",
+      "tags": ["Healthcare", "Doctor", "Hospital", "Full Time"],
+      "backgroundGradient": "bg-gradient-to-r from-red-600/20 to-pink-600/20"
+    },
+    "steps": [
+      {
+        "id": 1,
+        "title": "Personal Information",
+        "fields": [
+          {
+            "name": "firstName",
+            "label": "First Name",
+            "icon": "User",
+            "type": "text",
+            "placeholder": "Enter first name",
+            "validation": {
+              "minLength": 2,
+              "message": "First name must be at least 2 characters"
+            }
+          },
+          {
+            "name": "lastName",
+            "label": "Last Name",
+            "icon": "User",
+            "type": "text",
+            "placeholder": "Enter last name",
+            "validation": {
+              "minLength": 2,
+              "message": "Last name must be at least 2 characters"
+            }
+          },
+          {
+            "name": "email",
+            "label": "Email Address",
+            "icon": "Mail",
+            "type": "email",
+            "placeholder": "you@example.com",
+            "validation": {
+              "pattern": "email",
+              "message": "Invalid email address"
+            }
+          },
+          {
+            "name": "phone",
+            "label": "Phone Number",
+            "icon": "Phone",
+            "type": "text",
+            "placeholder": "+1 (XXX) XXX-XXXX",
+            "validation": {
+              "minLength": 10,
+              "message": "Phone number must be at least 10 digits"
+            }
+          },
+          {
+            "name": "address",
+            "label": "Residential Address",
+            "icon": "MapPin",
+            "type": "text",
+            "placeholder": "Enter your full address",
+            "validation": {
+              "required": true,
+              "message": "Address is required"
+            }
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Education & Medical Training",
+        "fields": [
+          {
+            "name": "medicalSchool",
+            "label": "Medical School",
+            "icon": "School",
+            "type": "text",
+            "placeholder": "Enter your medical school name",
+            "validation": {
+              "minLength": 2,
+              "message": "Medical school name is required"
+            }
+          },
+          {
+            "name": "graduationYear",
+            "label": "Year of Graduation",
+            "icon": "CalendarDays",
+            "type": "select",
+            "placeholder": "Select graduation year",
+            "options": [
+              { "label": "2010", "value": "2010" },
+              { "label": "2011", "value": "2011" },
+              { "label": "2012", "value": "2012" },
+              { "label": "2013", "value": "2013" },
+              { "label": "2014", "value": "2014" },
+              { "label": "2015", "value": "2015" },
+              { "label": "2016", "value": "2016" },
+              { "label": "2017", "value": "2017" },
+              { "label": "2018", "value": "2018" },
+              { "label": "2019", "value": "2019" },
+              { "label": "2020", "value": "2020" }
+            ],
+            "validation": {
+              "required": true,
+              "message": "Graduation year is required"
+            }
+          },
+          {
+            "name": "residencyProgram",
+            "label": "Residency Program",
+            "icon": "Briefcase",
+            "type": "select",
+            "placeholder": "Select your residency program",
+            "options": [
+              { "label": "Internal Medicine", "value": "internal_medicine" },
+              { "label": "Surgery", "value": "surgery" },
+              { "label": "Pediatrics", "value": "pediatrics" },
+              { "label": "Psychiatry", "value": "psychiatry" },
+              { "label": "Obstetrics & Gynecology", "value": "obgyn" },
+              { "label": "Other", "value": "other" }
+            ],
+            "validation": {
+              "required": true,
+              "message": "Residency program is required"
+            }
+          },
+          {
+            "name": "boardCertification",
+            "label": "Board Certification",
+            "icon": "BadgeCheck",
+            "type": "select",
+            "placeholder": "Select certification status",
+            "options": [
+              { "label": "Certified", "value": "certified" },
+              { "label": "Pending", "value": "pending" },
+              { "label": "Not Certified", "value": "not_certified" }
+            ],
+            "validation": {
+              "required": true,
+              "message": "Board certification status is required"
+            }
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Professional Experience",
+        "fields": [
+          {
+            "name": "specialization",
+            "label": "Medical Specialization",
+            "icon": "HeartPulse",
+            "type": "select",
+            "placeholder": "Select your specialization",
+            "options": [
+              { "label": "Cardiology", "value": "cardiology" },
+              { "label": "Neurology", "value": "neurology" },
+              { "label": "Orthopedics", "value": "orthopedics" },
+              { "label": "General Practice", "value": "general_practice" },
+              { "label": "Pediatrics", "value": "pediatrics" },
+              { "label": "Dermatology", "value": "dermatology" },
+              { "label": "Other", "value": "other" }
+            ],
+            "validation": {
+              "required": true,
+              "message": "Specialization is required"
+            }
+          },
+          {
+            "name": "experienceYears",
+            "label": "Years of Experience",
+            "icon": "Clock",
+            "type": "number",
+            "placeholder": "Enter years of experience",
+            "validation": {
+              "required": true,
+              "message": "Experience is required"
+            }
+          },
+          {
+            "name": "currentInstitution",
+            "label": "Current Hospital/Clinic",
+            "icon": "Hospital",
+            "type": "text",
+            "placeholder": "Enter your current hospital or clinic",
+            "validation": {
+              "required": true,
+              "message": "Current institution is required"
+            }
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Uploads & Documents",
+        "fields": [
+          {
+            "name": "resume",
+            "label": "Upload Resume",
+            "icon": "FileText",
+            "type": "file",
+            "accept": [".pdf", ".doc", ".docx"],
+            "validation": {
+              "required": true,
+              "message": "Resume is required"
+            }
+          },
+          {
+            "name": "medicalLicense",
+            "label": "Upload Medical License",
+            "icon": "File",
+            "type": "file",
+            "accept": [".pdf", ".doc", ".docx"],
+            "validation": {
+              "required": true,
+              "message": "Medical license is required"
+            }
+          },
+          {
+            "name": "certifications",
+            "label": "Upload Additional Certifications",
+            "icon": "File",
+            "type": "file",
+            "accept": [".pdf", ".doc", ".docx"],
+            "validation": {
+              "required": false,
+              "message": "Additional certifications are optional"
+            }
+          }
+        ]
+      }
+    ]
+  }
+  

@@ -1,0 +1,42 @@
+
+const steps = [
+  {
+    number: 1,
+    title: "Register your email",
+    description: "Get assessment details",
+  },
+  {
+    number: 2,
+    title: "Set up your device",
+    description: "Test audio and video",
+  },
+  {
+    number: 3,
+    title: "Start the assessment",
+    description: "Show your skills",
+  },
+]
+
+const benefits = [
+  {
+    icon: Stars,
+    title: "Discover your strengths",
+    description: "Uncover your potential and skills",
+  },
+  {
+    icon: Diamond,
+    title: "Stand out",
+    description: "Showcase your skills to employers",
+  },
+  {
+    icon: Rocket,
+    title: "Career acceleration",
+    description: "Get hired faster with skills-based hiring",
+  },
+]
+
+const companies = [
+  { name: "PepsiCo", logo: "/placeholder.svg" },
+  { name: "PayPal", logo: "/placeholder.svg" },
+  { name: "Equifax", logo: "/placeholder.svg" },
+]

@@ -66,21 +66,45 @@ public class SecurityConfig {
             if (path.startsWith("/api/super-admin") || path.startsWith("/api/tenants")) {
                 log.debug("Using super admin decoder for path: {}", path);
                 return superAdminJwtDecoder();
-            } else if (path.startsWith("/api/tenant")
+            }
+            // Handle onboarding-tasks with granular path matching
+            else if (path.startsWith("/api/onboarding-tasks/candidate/")) {
+                System.out.println("Using candidate decoder for candidate onboarding tasks path: {}");
+                System.out.println(path);
+                return candidateJwtDecoder();
+            }
+            else if (path.startsWith("/api/onboarding-tasks/tenant/") ||
+                    path.matches("/api/onboarding-tasks/\\d+") ||
+                    path.startsWith("/api/onboarding-tasks/statuses")) {
+                log.debug("Using tenant decoder for tenant onboarding tasks path: {}", path);
+                return tenantJwtDecoder();
+            }
+            // Handle other tenant endpoints
+            else if (path.startsWith("/api/candidate")
+                    || path.startsWith("/api/candidate-jobs")
+                    || path.startsWith("/api/jobs")
+                    || path.startsWith("/api/job-applications")) {
+                log.debug("Using candidate decoder for path: {}", path);
+                return candidateJwtDecoder();
+            }
+            else if (path.startsWith("/api/tenant")
                     || path.startsWith("/api/hiring")
                     || path.startsWith("/api/calls")
                     || path.startsWith("/api/interviews")
                     || path.startsWith("/api/feedback")
                     || path.startsWith("/api/candidates")
-                    || path.startsWith("/api/tenant-candidates")) {
+                    || path.startsWith("/api/tenant-candidates")
+                    || path.startsWith("/api/jobs/"
+                    )) {
                 log.debug("Using tenant decoder for path: {}", path);
                 return tenantJwtDecoder();
-            } else if (path.startsWith("/api/candidate")
-                    || path.startsWith("/api/jobs")
-                    || path.startsWith("/api/candidate-jobs")
-                    || path.startsWith("/api/job-applications")) {
-                log.debug("Using candidate decoder for path: {}", path);
-                return candidateJwtDecoder();
+            }
+            // Handle candidate endpoints
+
+            // Default onboarding-tasks paths (like PUT/DELETE by taskId) go to tenant
+            else if (path.startsWith("/api/onboarding-tasks")) {
+                log.debug("Using tenant decoder for general onboarding tasks path: {}", path);
+                return tenantJwtDecoder();
             }
 
             log.debug("Using default tenant decoder for path: {}", path);
@@ -99,25 +123,13 @@ public class SecurityConfig {
                                 "/api/candidate-jobs/**",
                                 "/api/candidates/**",
                                 "/api/documents/**",
-                                "/api/interviews/**",
-                                "/api/feedback/**",
-                                "/api/jobs/**",
                                 "/api/job-applications/**","/api/tenant/**",
                                 "/api/hiring/**",
-                                "/api/candidates/**",
-                                "/api/documents/**",
-                                "/api/files/**",
-                                "/api/interviews/**",
-                                "/api/feedback/**",
-                                "/api/calls/**",
-                                "/api/tenant-candidates/**",
                                 "/api/public/**",
                                 "/api/candidate/register",
-                                "/api/documents",
-                                "/api/files"
-                        ,"api/onboarding-tasks/").permitAll()
+                                "/api/jobs/**").permitAll()
                         .requestMatchers("/api/tenants/**", "/api/super-admin/**").hasRole("SUPER_ADMIN")
-
+                        .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt

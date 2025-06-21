@@ -1,0 +1,225 @@
+{
+    "banner": {
+      "jobTitle": "Accountant Application",
+      "description": "Apply now to join our financial team! We’re seeking detail-oriented accounting professionals with a passion for precision and analysis.",
+      "tags": ["Finance", "Accounting", "CPA", "Full Time"],
+      "backgroundGradient": "bg-gradient-to-r from-green-600/20 to-teal-600/20"
+    },
+    "steps": [
+      {
+        "id": 1,
+        "title": "Personal Information",
+        "fields": [
+          {
+            "name": "firstName",
+            "label": "First Name",
+            "icon": "User",
+            "type": "text",
+            "placeholder": "Enter first name",
+            "validation": {
+              "minLength": 2,
+              "message": "First name must be at least 2 characters"
+            }
+          },
+          {
+            "name": "lastName",
+            "label": "Last Name",
+            "icon": "User",
+            "type": "text",
+            "placeholder": "Enter last name",
+            "validation": {
+              "minLength": 2,
+              "message": "Last name must be at least 2 characters"
+            }
+          },
+          {
+            "name": "email",
+            "label": "Email Address",
+            "icon": "Mail",
+            "type": "email",
+            "placeholder": "you@example.com",
+            "validation": {
+              "pattern": "email",
+              "message": "Invalid email address"
+            }
+          },
+          {
+            "name": "phone",
+            "label": "Phone Number",
+            "icon": "Phone",
+            "type": "text",
+            "placeholder": "+1 (XXX) XXX-XXXX",
+            "validation": {
+              "minLength": 10,
+              "message": "Phone number must be at least 10 digits"
+            }
+          },
+          {
+            "name": "address",
+            "label": "Residential Address",
+            "icon": "MapPin",
+            "type": "text",
+            "placeholder": "Enter your full address",
+            "validation": {
+              "required": true,
+              "message": "Address is required"
+            }
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Education & Certifications",
+        "fields": [
+          {
+            "name": "college",
+            "label": "College/University",
+            "icon": "School",
+            "type": "text",
+            "placeholder": "Enter college/university name",
+            "validation": {
+              "minLength": 2,
+              "message": "Institution name is required"
+            }
+          },
+          {
+            "name": "graduationYear",
+            "label": "Graduation Year",
+            "icon": "CalendarDays",
+            "type": "select",
+            "placeholder": "Select graduation year",
+            "options": [
+              { "label": "2015", "value": "2015" },
+              { "label": "2016", "value": "2016" },
+              { "label": "2017", "value": "2017" },
+              { "label": "2018", "value": "2018" },
+              { "label": "2019", "value": "2019" },
+              { "label": "2020", "value": "2020" }
+            ],
+            "validation": {
+              "required": true,
+              "message": "Graduation year is required"
+            }
+          },
+          {
+            "name": "degree",
+            "label": "Degree",
+            "icon": "BookOpen",
+            "type": "select",
+            "placeholder": "Select degree",
+            "options": [
+              { "label": "Bachelor's in Accounting", "value": "bachelors" },
+              { "label": "Master's in Accounting", "value": "masters" },
+              { "label": "MBA", "value": "mba" }
+            ],
+            "validation": {
+              "required": true,
+              "message": "Degree is required"
+            }
+          },
+          {
+            "name": "cpaStatus",
+            "label": "CPA Certification Status",
+            "icon": "BadgeCheck",
+            "type": "select",
+            "placeholder": "Select CPA status",
+            "options": [
+              { "label": "Certified", "value": "certified" },
+              { "label": "In Process", "value": "in_process" },
+              { "label": "Not Certified", "value": "not_certified" }
+            ],
+            "validation": {
+              "required": true,
+              "message": "CPA certification status is required"
+            }
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Professional Experience",
+        "fields": [
+          {
+            "name": "specialization",
+            "label": "Area of Specialization",
+            "icon": "Briefcase",
+            "type": "select",
+            "placeholder": "Select specialization",
+            "options": [
+              { "label": "Tax Accounting", "value": "tax" },
+              { "label": "Auditing", "value": "auditing" },
+              { "label": "Management Accounting", "value": "management" },
+              { "label": "Forensic Accounting", "value": "forensic" },
+              { "label": "Other", "value": "other" }
+            ],
+            "validation": {
+              "required": true,
+              "message": "Specialization is required"
+            }
+          },
+          {
+            "name": "experienceYears",
+            "label": "Years of Experience",
+            "icon": "Clock",
+            "type": "number",
+            "placeholder": "Enter years of experience",
+            "validation": {
+              "required": true,
+              "message": "Experience is required"
+            }
+          },
+          {
+            "name": "currentEmployer",
+            "label": "Current Employer",
+            "icon": "Building",
+            "type": "text",
+            "placeholder": "Enter current employer",
+            "validation": {
+              "required": true,
+              "message": "Current employer is required"
+            }
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Uploads & Documents",
+        "fields": [
+          {
+            "name": "resume",
+            "label": "Upload Resume",
+            "icon": "FileText",
+            "type": "file",
+            "accept": [".pdf", ".doc", ".docx"],
+            "validation": {
+              "required": true,
+              "message": "Resume is required"
+            }
+          },
+          {
+            "name": "cpaCertificate",
+            "label": "Upload CPA Certificate",
+            "icon": "File",
+            "type": "file",
+            "accept": [".pdf", ".doc", ".docx"],
+            "validation": {
+              "required": true,
+              "message": "CPA certificate is required"
+            }
+          },
+          {
+            "name": "additionalDocs",
+            "label": "Upload Additional Documents",
+            "icon": "File",
+            "type": "file",
+            "accept": [".pdf", ".doc", ".docx"],
+            "validation": {
+              "required": false,
+              "message": "Additional documents are optional"
+            }
+          }
+        ]
+      }
+    ]
+  }
+  

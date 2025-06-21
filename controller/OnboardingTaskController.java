@@ -22,13 +22,6 @@ public class OnboardingTaskController {
 
     private final OnboardingTaskService onboardingTaskService;
 
-    // =========================
-    // TENANT ENDPOINTS
-    // =========================
-
-    /**
-     * Get all onboarding tasks for a tenant
-     */
     @GetMapping("/tenant/{tenantId}")
     public ResponseEntity<List<OnboardingTaskDTO>> getAllTasksForTenant(
             @PathVariable Long tenantId,
@@ -56,9 +49,6 @@ public class OnboardingTaskController {
         }
     }
 
-    /**
-     * Create a new onboarding task (Tenant operation)
-     */
     @PostMapping("/tenant/{tenantId}")
     public ResponseEntity<OnboardingTaskDTO> createTask(
             @PathVariable Long tenantId,
@@ -74,9 +64,6 @@ public class OnboardingTaskController {
         }
     }
 
-    /**
-     * Get overdue tasks for a tenant
-     */
     @GetMapping("/tenant/{tenantId}/overdue")
     public ResponseEntity<List<OnboardingTaskDTO>> getOverdueTasksForTenant(@PathVariable Long tenantId) {
         try {
@@ -88,13 +75,6 @@ public class OnboardingTaskController {
         }
     }
 
-    // =========================
-    // CANDIDATE ENDPOINTS
-    // =========================
-
-    /**
-     * Get all tasks assigned to a candidate
-     */
     @GetMapping("/candidate/{candidateId}")
     public ResponseEntity<List<OnboardingTaskDTO>> getTasksForCandidate(
             @PathVariable Long candidateId,
@@ -116,9 +96,6 @@ public class OnboardingTaskController {
         }
     }
 
-    /**
-     * Get pending tasks for a candidate
-     */
     @GetMapping("/candidate/{candidateId}/pending")
     public ResponseEntity<List<OnboardingTaskDTO>> getPendingTasksForCandidate(@PathVariable Long candidateId) {
         try {
@@ -130,9 +107,6 @@ public class OnboardingTaskController {
         }
     }
 
-    /**
-     * Get completed tasks for a candidate
-     */
     @GetMapping("/candidate/{candidateId}/completed")
     public ResponseEntity<List<OnboardingTaskDTO>> getCompletedTasksForCandidate(@PathVariable Long candidateId) {
         try {
@@ -144,9 +118,6 @@ public class OnboardingTaskController {
         }
     }
 
-    /**
-     * Mark a task as completed (Candidate operation)
-     */
     @PostMapping("/candidate/{candidateId}/tasks/{taskId}/complete")
     public ResponseEntity<OnboardingTaskDTO> completeTask(
             @PathVariable Long candidateId,
@@ -168,9 +139,6 @@ public class OnboardingTaskController {
         }
     }
 
-    /**
-     * Get task summary for a candidate
-     */
     @GetMapping("/candidate/{candidateId}/summary")
     public ResponseEntity<OnboardingTaskSummaryDTO> getTaskSummaryForCandidate(@PathVariable Long candidateId) {
         try {
@@ -182,13 +150,6 @@ public class OnboardingTaskController {
         }
     }
 
-    // =========================
-    // COMMON ENDPOINTS
-    // =========================
-
-    /**
-     * Get a specific task by ID
-     */
     @GetMapping("/{taskId}")
     public ResponseEntity<OnboardingTaskDTO> getTaskById(@PathVariable Long taskId) {
         try {
@@ -203,9 +164,6 @@ public class OnboardingTaskController {
         }
     }
 
-    /**
-     * Update a task
-     */
     @PutMapping("/{taskId}")
     public ResponseEntity<OnboardingTaskDTO> updateTask(
             @PathVariable Long taskId,
@@ -223,9 +181,6 @@ public class OnboardingTaskController {
         }
     }
 
-    /**
-     * Delete a task
-     */
     @DeleteMapping("/{taskId}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long taskId) {
         try {
@@ -240,13 +195,6 @@ public class OnboardingTaskController {
         }
     }
 
-    // =========================
-    // UTILITY ENDPOINTS
-    // =========================
-
-    /**
-     * Get all available task statuses
-     */
     @GetMapping("/statuses")
     public ResponseEntity<TaskStatus[]> getTaskStatuses() {
         return ResponseEntity.ok(TaskStatus.values());

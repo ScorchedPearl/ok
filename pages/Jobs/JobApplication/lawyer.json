@@ -1,0 +1,231 @@
+{
+    "banner": {
+      "jobTitle": "Lawyer Application",
+      "description": "Join our prestigious law firm and help us shape the future of legal excellence. Submit your application to work in a dynamic, fast-paced legal environment.",
+      "tags": ["Law Firm", "Litigation", "Corporate", "Full Time"],
+      "backgroundGradient": "bg-gradient-to-r from-blue-600/20 to-purple-600/20"
+    },
+    "steps": [
+      {
+        "id": 1,
+        "title": "Personal Information",
+        "fields": [
+          {
+            "name": "firstName",
+            "label": "First Name",
+            "icon": "User",
+            "type": "text",
+            "placeholder": "Enter first name",
+            "validation": {
+              "minLength": 2,
+              "message": "First name must be at least 2 characters"
+            }
+          },
+          {
+            "name": "lastName",
+            "label": "Last Name",
+            "icon": "User",
+            "type": "text",
+            "placeholder": "Enter last name",
+            "validation": {
+              "minLength": 2,
+              "message": "Last name must be at least 2 characters"
+            }
+          },
+          {
+            "name": "email",
+            "label": "Email Address",
+            "icon": "Mail",
+            "type": "email",
+            "placeholder": "you@example.com",
+            "validation": {
+              "pattern": "email",
+              "message": "Invalid email address"
+            }
+          },
+          {
+            "name": "phone",
+            "label": "Phone Number",
+            "icon": "Phone",
+            "type": "text",
+            "placeholder": "+1 (XXX) XXX-XXXX",
+            "validation": {
+              "minLength": 10,
+              "message": "Phone number must be at least 10 digits"
+            }
+          },
+          {
+            "name": "address",
+            "label": "Residential Address",
+            "icon": "MapPin",
+            "type": "text",
+            "placeholder": "Enter your full address",
+            "validation": {
+              "required": true,
+              "message": "Address is required"
+            }
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Education & Qualifications",
+        "fields": [
+          {
+            "name": "lawSchool",
+            "label": "Law School",
+            "icon": "School",
+            "type": "text",
+            "placeholder": "Enter your law school",
+            "validation": {
+              "minLength": 2,
+              "message": "Law school is required"
+            }
+          },
+          {
+            "name": "graduationYear",
+            "label": "Graduation Year",
+            "icon": "CalendarDays",
+            "type": "select",
+            "placeholder": "Select graduation year",
+            "options": [
+              { "label": "2010", "value": "2010" },
+              { "label": "2011", "value": "2011" },
+              { "label": "2012", "value": "2012" },
+              { "label": "2013", "value": "2013" },
+              { "label": "2014", "value": "2014" },
+              { "label": "2015", "value": "2015" },
+              { "label": "2016", "value": "2016" },
+              { "label": "2017", "value": "2017" },
+              { "label": "2018", "value": "2018" },
+              { "label": "2019", "value": "2019" },
+              { "label": "2020", "value": "2020" }
+            ],
+            "validation": {
+              "required": true,
+              "message": "Graduation year is required"
+            }
+          },
+          {
+            "name": "degree",
+            "label": "Degree",
+            "icon": "BookOpen",
+            "type": "select",
+            "placeholder": "Select your degree",
+            "options": [
+              { "label": "Juris Doctor (JD)", "value": "JD" },
+              { "label": "Bachelor of Laws (LLB)", "value": "LLB" },
+              { "label": "Master of Laws (LLM)", "value": "LLM" }
+            ],
+            "validation": {
+              "required": true,
+              "message": "Degree is required"
+            }
+          },
+          {
+            "name": "barAdmission",
+            "label": "Bar Admission Status",
+            "icon": "BadgeCheck",
+            "type": "select",
+            "placeholder": "Select your status",
+            "options": [
+              { "label": "Admitted", "value": "admitted" },
+              { "label": "Pending", "value": "pending" },
+              { "label": "Not Admitted", "value": "not_admitted" }
+            ],
+            "validation": {
+              "required": true,
+              "message": "Bar admission status is required"
+            }
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Professional Experience",
+        "fields": [
+          {
+            "name": "practiceAreas",
+            "label": "Practice Areas",
+            "icon": "Briefcase",
+            "type": "select",
+            "placeholder": "Select your practice area",
+            "options": [
+              { "label": "Corporate Law", "value": "corporate" },
+              { "label": "Criminal Law", "value": "criminal" },
+              { "label": "Family Law", "value": "family" },
+              { "label": "Intellectual Property", "value": "ip" },
+              { "label": "Civil Litigation", "value": "civil" },
+              { "label": "Other", "value": "other" }
+            ],
+            "validation": {
+              "required": true,
+              "message": "Practice area is required"
+            }
+          },
+          {
+            "name": "experienceYears",
+            "label": "Years of Experience",
+            "icon": "Clock",
+            "type": "number",
+            "placeholder": "Enter years of practice",
+            "validation": {
+              "required": true,
+              "message": "Experience is required"
+            }
+          },
+          {
+            "name": "currentFirm",
+            "label": "Current Firm/Organization",
+            "icon": "Building",
+            "type": "text",
+            "placeholder": "Enter current firm or organization",
+            "validation": {
+              "required": true,
+              "message": "Current firm is required"
+            }
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Uploads & Documents",
+        "fields": [
+          {
+            "name": "resume",
+            "label": "Upload Resume",
+            "icon": "FileText",
+            "type": "file",
+            "accept": [".pdf", ".doc", ".docx"],
+            "validation": {
+              "required": true,
+              "message": "Resume is required"
+            }
+          },
+          {
+            "name": "barCertificate",
+            "label": "Upload Bar Certificate",
+            "icon": "File",
+            "type": "file",
+            "accept": [".pdf", ".doc", ".docx"],
+            "validation": {
+              "required": true,
+              "message": "Bar certificate is required"
+            }
+          },
+          {
+            "name": "additionalDocs",
+            "label": "Upload Additional Documents",
+            "icon": "File",
+            "type": "file",
+            "accept": [".pdf", ".doc", ".docx"],
+            "validation": {
+              "required": false,
+              "message": "Optional documents"
+            }
+          }
+        ]
+      }
+    ]
+  }
+  
