@@ -51,7 +51,7 @@ public class CandidateController {
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity<Caidate> getCandidateByEmail(@PathVariable String email) {
+    public ResponseEntity<Candidate> getCandidateByEmail(@PathVariable String email) {
         Candidate candidate = candidateRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Candidate not found with email: " + email));
         return ResponseEntity.ok(candidate);
