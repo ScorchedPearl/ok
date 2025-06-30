@@ -120,7 +120,9 @@ public class SecurityConfig {
                         "/api/auth/test",
                         "/api/debug/**",
                         "/api/jobs",
-                        "/actuator/health/**"
+                        "/actuator/**",
+                        "/api/health/**",
+                        "/api/debug/**"
                 )
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-//@Component("databaseHealth")
+@Component("databaseHealth")
 @RequiredArgsConstructor
 @Slf4j
 public class DatabaseHealthIndicator implements HealthIndicator {

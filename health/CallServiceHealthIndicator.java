@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-//@Component("callServiceHealth")
+@Component("callServiceHealth")
 @RequiredArgsConstructor
 @Slf4j
 public class CallServiceHealthIndicator implements HealthIndicator {

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-//@Component("jobServiceHealth")
+@Component("jobServiceHealth")
 @RequiredArgsConstructor
 @Slf4j
 public class JobServiceHealthIndicator implements HealthIndicator {

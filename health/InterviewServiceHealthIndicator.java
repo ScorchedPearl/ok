@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-//@Component("interviewServiceHealth")
+@Component("interviewServiceHealth")
 @RequiredArgsConstructor
 @Slf4j
 public class InterviewServiceHealthIndicator implements HealthIndicator {
