@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../../components/ui/card";
@@ -17,31 +17,142 @@ import {
 } from "@/utils/offerhooks"; // Your existing hooks
 import { toast } from "react-hot-toast";
 
-// Mock candidates - you can replace this with your actual candidates hook
-const mockCandidates = [
-  { id: 456, name: "John Doe", email: "john.doe@email.com" },
-  { id: 457, name: "Jane Smith", email: "jane.smith@email.com" },
-  { id: 458, name: "Michael Johnson", email: "michael.johnson@email.com" },
-  { id: 459, name: "Emily Davis", email: "emily.davis@email.com" },
-  { id: 460, name: "Robert Wilson", email: "robert.wilson@email.com" },
-];
-
+export interface Candidate {
+  id: number;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  resumeContent?: string;
+  resumeSummary?: string;
+  firstName?: string;
+  lastName?: string;
+  status: "Active" | "Inactive" | "On Hold";
+  applicationCount: number;
+  testCount: number;
+  interviewCount: number;
+  createdAt: string;
+}
 const CreateOfferPage = () => {
   const navigate = useNavigate();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated,token } = useAuth();
   const [activeTab, setActiveTab] = useState("basic");
   const [selectedTemplate, setSelectedTemplate] = useState<string | undefined>(undefined);
   const [enhancementType, setEnhancementType] = useState<string>("PROFESSIONAL");
+  const [mockCandidates,setMockCandidates] = useState<Candidate[]>([]);
+  const interviewServiceUrl = import.meta.env.VITE_INTERVIEW_SERVICE_URL;
+ useEffect(() => {
+     const fetchCandidates = async () => {
+       if (!user?.tenant?.tenantId || token?.access_token) return;
+       const controller = new AbortController();
+       const signal = controller.signal;
+       
+       try {
+         // Update: Fetch from the correct API endpoint with tenantId
+         const res = await fetch(`${interviewServiceUrl}/api/tenant-candidates/tenants/${user.tenant.tenantId}/candidates`, {
+           headers: {
+             Authorization: `Bearer ${token?.access_token}`,
+           },
+           signal,
+         });
+         
+         if (!res.ok) {
+           throw new Error(`Failed to fetch candidates. Status: ${res.status}`);
+         }
+         
+         // If successful, use the API data
+         const apiCandidates = await res.json();
+ 
+         console.log("API response:", apiCandidates);
+         
+         // Map API response to our Candidate interface with additional hardcoded fields
+         const mappedCandidates = apiCandidates.map((candidate: any) => {
+           // Split fullName into firstName and lastName (best effort)
+           const nameParts = candidate.fullName.split(' ');
+           const firstName = nameParts[0] || '';
+           const lastName = nameParts.slice(1).join(' ') || '';
+           
+           // Generate a random date within the last 90 days for createdAt
+           const daysAgo = Math.floor(Math.random() * 90);
+           const createdAt = new Date();
+           createdAt.setDate(createdAt.getDate() - daysAgo);
+           
+           // Generate random status
+           const statuses: ("Active" | "Inactive" | "On Hold")[] = ["Active", "Inactive", "On Hold"];
+           const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+           
+           return {
+             id: candidate.id,
+             fullName: candidate.fullName,
+             firstName: firstName,
+             lastName: lastName,
+             email: candidate.email,
+             phoneNumber: candidate.phoneNumber,
+             resumeContent: candidate.resumeContent,
+             resumeSummary: candidate.resumeSummary,
+             
+             status: randomStatus,
+             applicationCount: Math.floor(Math.random() * 5),
+             testCount: Math.floor(Math.random() * 3),
+             interviewCount: Math.floor(Math.random() * 2),
+             createdAt: createdAt.toISOString(),
+           };
+         });
+         
+         setMockCandidates(mappedCandidates);
+         console.log("Successfully fetched candidates from API:", mappedCandidates);
+         
+       } catch (err: any) {
+         const mockCandidates: Candidate[] = generateMockCandidates();
+         setMockCandidates(mockCandidates);
+         
+         console.log("Using mock data:", mockCandidates.length);
+       } 
+     };
 
+    fetchCandidates();
+  }, [user?.tenant?.tenantId, token]);
   if (!isAuthenticated || !user) {
     toast.error("Authentication required");
     navigate("/login");
     return null;
   }
 
+
   const userId = user.userId?.toString() || "";
   const userRole = user.role as any;
+ const generateMockCandidates = (): Candidate[] => {
+      const firstNames = ["James", "Mary", "John", "Patricia", "Robert", "Jennifer", "Michael", "Linda", "William", "Elizabeth", "David", "Susan", "Richard", "Jessica", "Joseph", "Sarah", "Thomas", "Karen", "Charles", "Nancy"];
+      const lastNames = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez", "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas", "Taylor", "Moore", "Jackson", "Martin"];
+      const domains = ["gmail.com", "yahoo.com", "outlook.com", "hotmail.com", "aol.com", "icloud.com", "protonmail.com", "mail.com"];
+      const statuses: ("Active" | "Inactive" | "On Hold")[] = ["Active", "Inactive", "On Hold"];
 
+      return Array.from({ length: 35 }, (_, i) => {
+        const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+        const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+        const domain = domains[Math.floor(Math.random() * domains.length)];
+        const status = statuses[Math.floor(Math.random() * statuses.length)];
+        
+        // Create a random date within the last 90 days
+        const daysAgo = Math.floor(Math.random() * 90);
+        const createdAt = new Date();
+        createdAt.setDate(createdAt.getDate() - daysAgo);
+        
+        return {
+          id: i + 1,
+          fullName: `${firstName} ${lastName}`,
+          firstName,
+          lastName,
+          email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@${domain}`,
+          phoneNumber: `+1 (${Math.floor(Math.random() * 900) + 100}) ${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
+          status,
+          applicationCount: Math.floor(Math.random() * 5),
+          testCount: Math.floor(Math.random() * 3),
+          interviewCount: Math.floor(Math.random() * 2),
+          createdAt: createdAt.toISOString(),
+        };
+      });
+    };
+    
   // API hooks
   const { data: templates, loading: templatesLoading } = useTemplates(userId, userRole);
   const { createOffer, createFromTemplate, loading: creatingOffer } = useCreateOffer();
@@ -58,7 +169,7 @@ const CreateOfferPage = () => {
 
   const handleSelectCandidate = (candidateId: string) => {
     const candidate = mockCandidates.find(c => c.id.toString() === candidateId);
-    updateField('candidateName', candidate ? candidate.name : '');
+    updateField('candidateName', candidate ? candidate.fullName : '');
   };
 
   const handleSelectTemplate = async (templateId: string) => {
@@ -103,11 +214,11 @@ const CreateOfferPage = () => {
 
   const handleSaveDraft = async () => {
     if (!isValid()) {
-      toast.error("Please fill in required fields (candidate name, position, salary)");
+      toast.error("Please fill in required fields (candidate fullName, position, salary)");
       return;
     }
 
-    const candidateId = mockCandidates.find(c => c.name === offerContent.candidateName)?.id;
+    const candidateId = mockCandidates.find(c => c.fullName === offerContent.candidateName)?.id;
     if (!candidateId) {
       toast.error("Please select a valid candidate");
       return;
@@ -133,7 +244,7 @@ const CreateOfferPage = () => {
       return;
     }
 
-    const candidateId = mockCandidates.find(c => c.name === offerContent.candidateName)?.id;
+    const candidateId = mockCandidates.find(c => c.fullName === offerContent.candidateName)?.id;
     if (!candidateId) {
       toast.error("Please select a valid candidate");
       return;
@@ -161,7 +272,7 @@ const CreateOfferPage = () => {
             <div>
               <label className="block text-sm font-medium mb-1 text-gray-700">Candidate</label>
               <Select 
-                value={mockCandidates.find(c => c.name === offerContent.candidateName)?.id.toString() || ""} 
+                value={mockCandidates.find(c => c.fullName === offerContent.candidateName)?.id.toString() || ""} 
                 onValueChange={handleSelectCandidate}
               >
                 <SelectTrigger className="border-gray-300 text-gray-900">
@@ -170,7 +281,7 @@ const CreateOfferPage = () => {
                 <SelectContent>
                   {mockCandidates.map(candidate => (
                     <SelectItem key={candidate.id} value={candidate.id.toString()}>
-                      {candidate.name}
+                      {candidate.fullName}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -338,7 +449,7 @@ const CreateOfferPage = () => {
                     <div>
                       <label className="block text-sm font-medium mb-1 text-gray-700">Candidate</label>
                       <Select 
-                        value={mockCandidates.find(c => c.name === offerContent.candidateName)?.id.toString() || ""} 
+                        value={mockCandidates.find(c => c.fullName === offerContent.candidateName)?.id.toString() || ""} 
                         onValueChange={handleSelectCandidate}
                       >
                         <SelectTrigger className="border-gray-300 text-gray-900">
@@ -347,7 +458,7 @@ const CreateOfferPage = () => {
                         <SelectContent>
                           {mockCandidates.map(candidate => (
                             <SelectItem key={candidate.id} value={candidate.id.toString()}>
-                              {candidate.name}
+                              {candidate.fullName}
                             </SelectItem>
                           ))}
                         </SelectContent>
