@@ -27,9 +27,10 @@ import {
   formatSalary,
   formatDate
 } from '@/utils/api';
+import { FileText, Clock, Edit, CheckCircle, XCircle } from 'lucide-react';
 
 // =============================================================================
-// CUSTOM REACT HOOKS FOR OFFER MANAGEMENT WITH VALIDATION
+// ENHANCED API HOOKS WITH FULL APPROVAL & SIGNATURE SUPPORT
 // =============================================================================
 
 interface ApiHookState<T> {
@@ -306,7 +307,7 @@ export const useOffersByStatus = (userId: string, userRole: string, status: Offe
 };
 
 // =============================================================================
-// APPROVAL HOOKS
+// ENHANCED APPROVAL HOOKS
 // =============================================================================
 
 export const usePendingApprovals = (userId: string) => {
@@ -376,6 +377,37 @@ export const useApproveOffer = () => {
   return { approveOffer, loading };
 };
 
+// Enhanced approval workflow hook
+export const useApprovalWorkflow = (userId: string) => {
+  const { data: pendingApprovals, loading, refetch } = usePendingApprovals(userId);
+  const { approveOffer, loading: approving } = useApproveOffer();
+
+  const processApproval = async (
+    userRole: string,
+    offerId: number,
+    action: 'APPROVED' | 'REJECTED' | 'SKIPPED',
+    comment?: string
+  ) => {
+    if (!comment && action === 'REJECTED') {
+      toast.error('Please provide a comment when rejecting an offer');
+      return false;
+    }
+
+    const success = await approveOffer(userId, userRole, offerId, { action, comment });
+    if (success) {
+      await refetch(); // Refresh pending approvals
+    }
+    return success;
+  };
+
+  return {
+    pendingApprovals,
+    loading: loading || approving,
+    processApproval,
+    refetch
+  };
+};
+
 // =============================================================================
 // TEMPLATE HOOKS
 // =============================================================================
@@ -416,7 +448,7 @@ export const useTemplates = (userId: string, userRole: string) => {
 };
 
 // =============================================================================
-// SIGNATURE HOOKS
+// ENHANCED SIGNATURE HOOKS
 // =============================================================================
 
 export const useSignOffer = () => {
@@ -447,6 +479,87 @@ export const useSignOffer = () => {
   };
 
   return { signOffer, loading };
+};
+
+// Enhanced electronic signature hook with full functionality
+export const useElectronicSignature = () => {
+  const { token } = useAuth();
+  const [loading, setLoading] = useState(false);
+
+  const signOffer = async (
+    offerId: number,
+    signatureData: SignOfferRequest
+  ): Promise<SignatureDTO | null> => {
+    if (!token) {
+      toast.error('Authentication required');
+      return null;
+    }
+
+    try {
+      setLoading(true);
+      const signature = await api.signatures.signOffer(token, offerId, signatureData);
+      toast.success('Offer signed successfully!');
+      return signature;
+    } catch (error) {
+      console.error('Error signing offer:', error);
+      toast.error((error as Error).message);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getSignatureDetails = async (
+    userId: string,
+    userRole: string,
+    offerId: number
+  ): Promise<SignatureDTO | null> => {
+    if (!token) {
+      toast.error('Authentication required');
+      return null;
+    }
+
+    try {
+      setLoading(true);
+      const signature = await api.signatures.getSignatureDetails(token, userId, userRole, offerId);
+      return signature;
+    } catch (error) {
+      console.error('Error getting signature details:', error);
+      toast.error((error as Error).message);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const downloadSignedPdf = async (
+    userId: string,
+    userRole: string,
+    offerId: number
+  ) => {
+    if (!token) {
+      toast.error('Authentication required');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await api.signatures.downloadSignedPdfFile(token, userId, userRole, offerId);
+      toast.success('Signed PDF downloaded successfully!');
+    } catch (error) {
+      console.error('Error downloading signed PDF:', error);
+      toast.error((error as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { 
+    signOffer, 
+    getSignatureDetails, 
+    downloadSignedPdf, 
+    loading 
+  };
 };
 
 // =============================================================================
@@ -689,37 +802,6 @@ export const useOfferForm = (initialContent?: OfferContent, candidateData?: Cand
   };
 };
 
-// Hook for managing approval workflow
-export const useApprovalWorkflow = (userId: string) => {
-  const { data: pendingApprovals, loading, refetch } = usePendingApprovals(userId);
-  const { approveOffer, loading: approving } = useApproveOffer();
-
-  const processApproval = async (
-    userRole: string,
-    offerId: number,
-    action: 'APPROVED' | 'REJECTED' | 'SKIPPED',
-    comment?: string
-  ) => {
-    if (!comment && action === 'REJECTED') {
-      toast.error('Please provide a comment when rejecting an offer');
-      return false;
-    }
-
-    const success = await approveOffer(userId, userRole, offerId, { action, comment });
-    if (success) {
-      await refetch(); // Refresh pending approvals
-    }
-    return success;
-  };
-
-  return {
-    pendingApprovals,
-    loading: loading || approving,
-    processApproval,
-    refetch
-  };
-};
-
 // Hook for submission workflow
 export const useSubmitForApproval = () => {
   const { token } = useAuth();
@@ -754,7 +836,7 @@ export const useSubmitForApproval = () => {
   return { submitForApproval, loading };
 };
 
-// Hook for offer status management
+// Enhanced offer status management hook with approval and signature states
 export const useOfferStatus = () => {
   const getStatusColor = (status: OfferStatus): string => {
     switch (status) {
@@ -800,5 +882,95 @@ export const useOfferStatus = () => {
     canSubmit,
     canApprove,
     canSign
+  };
+};
+
+// Enhanced offer status hook with additional functionality
+export const useEnhancedOfferStatus = () => {
+  const getStatusColor = (status: OfferStatus): string => {
+    switch (status) {
+      case 'DRAFT':
+        return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'PENDING_APPROVAL':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'READY_FOR_SIGN':
+        return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'SIGNED':
+        return 'bg-green-100 text-green-800 border-green-200';
+      case 'REJECTED':
+        return 'bg-red-100 text-red-800 border-red-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
+    }
+  };
+
+  const getStatusText = (status: OfferStatus): string => {
+    return status.replace(/_/g, ' ').toLowerCase();
+  };
+
+  const getStatusIcon = (status: OfferStatus) => {
+    switch (status) {
+      case 'DRAFT':
+        return FileText;
+      case 'PENDING_APPROVAL':
+        return Clock;
+      case 'READY_FOR_SIGN':
+        return Edit;
+      case 'SIGNED':
+        return CheckCircle;
+      case 'REJECTED':
+        return XCircle;
+      default:
+        return FileText;
+    }
+  };
+
+  const canEdit = (status: OfferStatus): boolean => {
+    return status === 'DRAFT';
+  };
+
+  const canSubmit = (status: OfferStatus): boolean => {
+    return status === 'DRAFT';
+  };
+
+  const canApprove = (status: OfferStatus): boolean => {
+    return status === 'PENDING_APPROVAL';
+  };
+
+  const canSign = (status: OfferStatus): boolean => {
+    return status === 'READY_FOR_SIGN';
+  };
+
+  const canDownloadSigned = (status: OfferStatus): boolean => {
+    return status === 'SIGNED';
+  };
+
+  const getNextAction = (status: OfferStatus): string => {
+    switch (status) {
+      case 'DRAFT':
+        return 'Submit for Approval';
+      case 'PENDING_APPROVAL':
+        return 'Awaiting Approval';
+      case 'READY_FOR_SIGN':
+        return 'Ready to Sign';
+      case 'SIGNED':
+        return 'Completed';
+      case 'REJECTED':
+        return 'Rejected';
+      default:
+        return 'Unknown';
+    }
+  };
+
+  return {
+    getStatusColor,
+    getStatusText,
+    getStatusIcon,
+    canEdit,
+    canSubmit,
+    canApprove,
+    canSign,
+    canDownloadSigned,
+    getNextAction
   };
 };

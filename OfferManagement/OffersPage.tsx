@@ -445,10 +445,10 @@ const OffersManagementPage = () => {
               </div>
 
               {/* Sort Controls */}
-              <div className="flex gap-3">
+              <div className="flex gap-3 ">
                 <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-40">
-                    <SelectValue placeholder="Sort by" />
+                  <SelectTrigger className="w-40 bg-indigo-600 hover:bg-indigo-700 text-white">
+                    <SelectValue placeholder="Sort by" className="bg-indigo-600 hover:bg-indigo-700 text-white" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="createdAt">Created Date</SelectItem>
@@ -459,8 +459,8 @@ const OffersManagementPage = () => {
                 </Select>
 
                 <Select value={sortOrder} onValueChange={(value: "asc" | "desc") => setSortOrder(value)}>
-                  <SelectTrigger className="w-32">
-                    <SelectValue placeholder="Order" />
+                  <SelectTrigger className="w-32 bg-indigo-600 hover:bg-indigo-700 text-white">
+                    <SelectValue placeholder="Order" className="bg-indigo-600 hover:bg-indigo-700 text-white" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="desc">Newest</SelectItem>
@@ -469,7 +469,7 @@ const OffersManagementPage = () => {
                 </Select>
 
                 {(searchQuery || sortBy !== "createdAt" || sortOrder !== "desc") && (
-                  <Button variant="outline" onClick={clearFilters} size="default">
+                  <Button variant="outline" onClick={clearFilters} size="default" className="text-black">
                     <Filter className="h-4 w-4 mr-2" />
                     Clear
                   </Button>
